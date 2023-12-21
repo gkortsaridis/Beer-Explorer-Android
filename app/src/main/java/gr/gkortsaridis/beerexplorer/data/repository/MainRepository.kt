@@ -11,7 +11,7 @@ class MainRepository @Inject constructor(
     private val apiHelper: ApiHelper,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider()
 ){
-    suspend fun getBeers(): List<Beer> = withContext(dispatcherProvider.io()) {
-        return@withContext apiHelper.getBeers()
+    suspend fun getBeers(pageNum: Int): List<Beer> = withContext(dispatcherProvider.io()) {
+        return@withContext apiHelper.getBeers(pageNum)
     }
 }

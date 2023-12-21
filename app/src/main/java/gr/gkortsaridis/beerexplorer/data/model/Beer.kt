@@ -14,10 +14,10 @@ data class Beer(
     val abv: Double,
     val ibu: Double?,
     @SerializedName("target_fg")
-    val targetFg: Long,
+    val targetFg: Double,
     @SerializedName("target_og")
     val targetOg: Double,
-    val ebc: Long?,
+    val ebc: Double?,
     val srm: Double?,
     val ph: Double?,
     @SerializedName("attenuation_level")
@@ -36,12 +36,12 @@ data class Beer(
 )
 
 data class Volume(
-    val value: Long,
+    val value: Double,
     val unit: String,
 )
 
 data class BoilVolume(
-    val value: Long,
+    val value: Double,
     val unit: String,
 )
 
@@ -58,17 +58,12 @@ data class MashTemp(
 )
 
 data class Temp(
-    val value: Long,
+    val value: Double,
     val unit: String,
 )
 
 data class Fermentation(
-    val temp: Temp2,
-)
-
-data class Temp2(
-    val value: Long,
-    val unit: String,
+    val temp: Temp,
 )
 
 data class Ingredients(
@@ -89,12 +84,7 @@ data class Amount(
 
 data class Hop(
     val name: String,
-    val amount: Amount2,
+    val amount: Amount,
     val add: String,
     val attribute: String,
-)
-
-data class Amount2(
-    val value: Double,
-    val unit: String,
 )

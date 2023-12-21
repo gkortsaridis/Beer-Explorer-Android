@@ -16,18 +16,20 @@ class MainViewModel @Inject constructor(
     private val mainRepository: MainRepository
 ) : ViewModel() {
 
+    private val beersPageToRetrieve = 1
+
     private val _beers = MutableSharedFlow<BeersUiStates>()
     val beers: Flow<BeersUiStates> = _beers.asSharedFlow()
 
     init {
-        getBeers()
+        getBeers(beersPageToRetrieve)
     }
 
-    private fun getBeers() {
+    private fun getBeers(pageNum: Int) {
         viewModelScope.launch {
             _beers.emit(BeersUiStates.Loading)
             try {
-                val beers = mainRepository.getBeers()
+                val beers = mainRepository.getBeers(pageNum)
                 _beers.emit(BeersUiStates.Success(beers))
             } catch (ex : Exception) {
                 _beers.emit(BeersUiStates.Error(ex.message ?: "Error"))
