@@ -13,7 +13,7 @@ data class Beer(
     val firstBrewed: String,
     val description: String,
     @SerializedName("image_url")
-    val imageUrl: String,
+    val imageUrl: String?,
     val abv: Double,
     val ibu: Double?,
     @SerializedName("target_fg")

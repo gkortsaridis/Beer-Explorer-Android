@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import gr.gkortsaridis.beerexplorer.data.model.Beer
 import gr.gkortsaridis.beerexplorer.databinding.RvItemBeerBinding
@@ -58,7 +59,7 @@ class BeersAdapter : RecyclerView.Adapter<BeersAdapter.BeersItemVH>(){
         data class BeerVH(private val binding: RvItemBeerBinding) : BeersItemVH(binding.root) {
             fun bind(beer: Beer, clickListener: ClickListener?) {
                 binding.beer = beer
-                binding.root.setOnClickListener { clickListener?.onItemClick(beer) }
+                binding.root.setOnClickListener { clickListener?.onItemClick(beer, binding.beerImage) }
             }
         }
         data class LoadMoreVH(private val binding: RvItemLoadMoreBinding) : BeersItemVH(binding.root) {
@@ -74,7 +75,7 @@ class BeersAdapter : RecyclerView.Adapter<BeersAdapter.BeersItemVH>(){
     }
 
     interface ClickListener {
-        fun onItemClick(beer: Beer)
+        fun onItemClick(beer: Beer, beerImageView: ImageView)
         fun onLoadMoreClick()
     }
 }

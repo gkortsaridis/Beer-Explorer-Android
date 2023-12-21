@@ -1,10 +1,12 @@
 package gr.gkortsaridis.beerexplorer.ui.main
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityOptionsCompat
@@ -40,14 +42,16 @@ class MainActivity : AppCompatActivity(), BeersAdapter.ClickListener {
     }
 
     private fun collectBeers() = lifecycleScope.launch {
-        val dialog = ProgressDialog(this@MainActivity)
-        dialog.setMessage("Loading...")
+        val builder = AlertDialog.Builder(this@MainActivity)
+        builder.setMessage("Loading...")
+        builder.setCancelable(false)
+        val dialog = builder.create()
 
         viewModel.beers.collect { beersUiState ->
             when(beersUiState) {
                 is MainViewModel.BeersUiStates.Success -> {
                     dialog.hide()
-                    adapter.setBeersToDisplay(BeerAdapterListCreator.createBeerList(beersUiState.beers, true))
+                    adapter.setBeersToDisplay(BeerAdapterListCreator.createBeerList(beersUiState.beers, beersUiState.hasMore))
                 }
                 is MainViewModel.BeersUiStates.Error -> {
                     dialog.hide()
@@ -58,15 +62,18 @@ class MainActivity : AppCompatActivity(), BeersAdapter.ClickListener {
         }
     }
 
-    override fun onItemClick(beer: Beer) {
+    override fun onItemClick(beer: Beer, beerImageView: ImageView) {
         startActivity(
             Intent(this@MainActivity, BeerDetailsActivity::class.java).apply {
                 putExtra("BEER", beer)
-            }
+            },
+            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this@MainActivity, beerImageView, "beer_image"
+            ).toBundle()
         )
     }
 
     override fun onLoadMoreClick() {
-
+        viewModel.loadNextBeersPage()
     }
 }

@@ -19,6 +19,7 @@
             android:layout_height="150dp"
             android:id="@+id/beer_image"
             app:imageUrl="@{beer.imageUrl}"
+            android:transitionName="beer_image"
             tools:src="@mipmap/ic_launcher"/>
         <LinearLayout
             android:layout_width="match_parent"
