@@ -1,11 +1,13 @@
 package gr.gkortsaridis.beerexplorer.ui.main
 
 import android.app.ProgressDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.app.ActivityOptionsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,10 +15,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import gr.gkortsaridis.beerexplorer.R
 import gr.gkortsaridis.beerexplorer.data.model.Beer
 import gr.gkortsaridis.beerexplorer.databinding.ActivityMainBinding
+import gr.gkortsaridis.beerexplorer.ui.details.BeerDetailsActivity
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BeersAdapter.ClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
@@ -28,15 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
 
-        adapter.setClickListener(object : BeersAdapter.ClickListener{
-            override fun onItemClick(beer: Beer) {
-
-            }
-
-            override fun onLoadMoreClick() {
-            }
-
-        })
+        adapter.setClickListener(this)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.toolbar.title = getString(R.string.app_name)
@@ -61,5 +56,17 @@ class MainActivity : AppCompatActivity() {
                 is MainViewModel.BeersUiStates.Loading -> { dialog.show() }
             }
         }
+    }
+
+    override fun onItemClick(beer: Beer) {
+        startActivity(
+            Intent(this@MainActivity, BeerDetailsActivity::class.java).apply {
+                putExtra("BEER", beer)
+            }
+        )
+    }
+
+    override fun onLoadMoreClick() {
+
     }
 }
